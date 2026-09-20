@@ -6,7 +6,7 @@ import crypto from "node:crypto";
 const login = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ message: "Plase provide " });
+    return res.status(400).json({ message: "Plase provide proper info " });
   }
 
   try {
@@ -19,7 +19,8 @@ const login = async (req, res) => {
         await user.save();
         return res
           .status(StatusCodes.ACCEPTED)
-          .json({ message: `Welcome Back ${user.name}` });
+          .json({ message: `Welcome Back ${user.name}`,token: token });
+      
       }
       return res
         .status(StatusCodes.NOT_FOUND)
@@ -39,7 +40,7 @@ const register = async (req, res) => {
     let user = await User.findOne({ username });
     if (user) {
       return res
-        .status(StatusCodes.ACCEPTED)
+        .status(StatusCodes.CONFLICT)
         .json({ message: `User with given username already exists ` });
     }
     let hashedPassword = await bcrypt.hash(password, 10);
@@ -51,10 +52,10 @@ const register = async (req, res) => {
     await newUser.save();
 
     return res
-      .status(StatusCodes.ACCEPTED)
+      .status(StatusCodes.CREATED)
       .json({ message: `Register successfully` });
   } catch (e) {
-    console.log(e);
+   res.json({ message: `Something went wrong ${e}` })
   }
 };
 

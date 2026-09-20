@@ -1,0 +1,9 @@
+.authBox{
+    height: 100vh;
+   
+    background: url("./utils/login.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+ 
+
+}
